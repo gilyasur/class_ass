@@ -18,7 +18,17 @@
     <h1>Comp Functions</h1>
     <input id="number" type="text" /><br>
     <button onclick="isPal()">Check if is palindrome</button><br>
-    <button onclick="calculateSumOfDigits()">Calculate Sum</button>
+    <button onclick="calculateSumOfDigits()">Calculate Sum</button><br>
+
+    <h1>myzip Test</h1>
+
+    <label for="input1">Iterable 1:</label>
+    <input id="input1" type="text"><br>
+
+    <label for="input2">Iterable 2:</label>
+    <input id="input2" type="text"><br>
+
+    <button onclick="testMyZip()">Test myzip</button>
     <div id="display"></div>
     <script>
       MY_SERVER = "http://127.0.0.1:5000";
@@ -114,6 +124,20 @@
           ).innerHTML = `Error: ${error.response.data.error}`;
         }
       };
+
+      const testMyZip = async () => {
+            const input1 = document.getElementById('input1').value.split(',');
+            const input2 = document.getElementById('input2').value.split(',');
+
+            try {
+                const response = await axios.post(`${MY_SERVER}/test_myzip`, { it1: input1, it2: input2 });
+                const result = response.data.result;
+                document.getElementById('display').innerHTML = `Result: ${JSON.stringify(result)}`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('display').innerHTML = `Error: ${error.response.data.error}`;
+            }
+        };
     </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, jsonify
 from tools.col import *
 from tools.numbers.simp import *
 from tools.numbers.comp import *
@@ -49,6 +49,16 @@ def calculate_sum_of_digits():
         return {'result': result}
     except KeyError:
         return {'error': 'Invalid request data'}, 400
+
+@app.route('/test_myzip', methods=['POST'])
+def test_myzip():
+    try:
+        it1 = request.json['it1']
+        it2 = request.json['it2']
+        zipped_result = list(myzip(it1, it2))
+        return jsonify({'result': zipped_result})
+    except KeyError:
+        return jsonify({'error': 'Invalid request data'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
