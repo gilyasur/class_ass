@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, abort
 from tools.col import *
 from tools.numbers.simp import *
 from tools.numbers.comp import *
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
