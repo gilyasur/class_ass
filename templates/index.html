@@ -1,0 +1,120 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Functions</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    
+
+    <h1>Simple Functions</h1>
+    First Number<input id="sumNumber1" type="text" /><br />
+    Second Number <input id="sumNumber2" type="text" /><br />
+    <button onclick="sumNumber()">Sum of numbers</button>
+    <button onclick="subNumber()">Substract of Numbers</button><br/><br/>
+    <div id="simpdisplay" ></div>
+    <h1>Comp Functions</h1>
+    <input id="number" type="text" /><br>
+    <button onclick="isPal()">Check if is palindrome</button><br>
+    <button onclick="calculateSumOfDigits()">Calculate Sum</button>
+    <div id="display"></div>
+    <script>
+      MY_SERVER = "http://127.0.0.1:5000";
+      let checkSimp = false;
+
+      const isPal = async () => {
+        if (!checkSimp) {
+          // Display an error message or handle the case where checkSimp is false
+          document.getElementById("display").innerHTML =
+            "You must call one of the simple function before calling this function.";
+          return;
+        }
+
+        const checkNumber = document.getElementById("number").value;
+        try {
+          const response = await axios.post(`${MY_SERVER}/check_pal`, {
+            number: checkNumber,
+          });
+          const result = response.data.result;
+          document.getElementById("display").innerHTML = `${checkNumber} is ${
+            result ? "a palindrome" : "not a palindrome"
+          }.`;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const sumNumber = async () => {
+        const checkNumber1 = document.getElementById("sumNumber1").value;
+        const checkNumber2 = document.getElementById("sumNumber2").value;
+
+        try {
+          const response = await axios.post(`${MY_SERVER}/check_sum`, {
+            number1: checkNumber1,
+            number2: checkNumber2,
+          });
+          const result = response.data.result;
+          document.getElementById(
+            "simpdisplay"
+          ).innerHTML = `Result of Sum: ${result}`;
+          checkSimp = true;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const subNumber = async () => {
+        const checkNumber1 = parseInt(
+          document.getElementById("sumNumber1").value
+        );
+        const checkNumber2 = parseInt(
+          document.getElementById("sumNumber2").value
+        );
+
+        try {
+          const response = await axios.post(`${MY_SERVER}/check_sub`, {
+            number1: checkNumber1,
+            number2: checkNumber2,
+          });
+          const result = response.data.result;
+          document.getElementById(
+            "simpdisplay"
+          ).innerHTML = `Result of Substraction: ${result}`;
+          checkSimp = true;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const calculateSumOfDigits = async () => {
+        if (!checkSimp) {
+          // Display an error message or handle the case where checkSimp is false
+          document.getElementById("display").innerHTML =
+            "You must call one of the simple function before calling this function.";
+          return;
+        }
+
+        const number = parseInt(document.getElementById("number").value);
+
+        try {
+          const response = await axios.post(
+            `${MY_SERVER}/calculate_sum_of_digits`,
+            { number }
+          );
+          const result = response.data.result;
+          document.getElementById(
+            "display"
+          ).innerHTML = `Sum of digits: ${result}`;
+        } catch (error) {
+          console.error(error);
+          document.getElementById(
+            "display"
+          ).innerHTML = `Error: ${error.response.data.error}`;
+        }
+      };
+    </script>
+  </body>
+</html>
